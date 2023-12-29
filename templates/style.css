@@ -1,0 +1,8 @@
+#drop-zone {
+    cursor: pointer;
+    min-height: 150px;
+    border: 2px dashed #007bff;
+}
+.drop-zone-hover {
+    background-color: #f0f8ff;
+}

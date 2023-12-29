@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to My Flask App</title>
+    <script src="script.js"></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h1>Hello, Flask! Show database!</h1>
+    <p1>ID - Password</p1>
+    <ul>
+        {% for row in data %}
+            <li>{{ row.id }} - {{ row.password }}</li>  <!-- Replace 'column_name' with your actual column name -->
+        {% endfor %}
+    </ul>
+    <p>Welcome to the home page of my Flask app.</p>
+    
+    <div class="container">
+        <form action="/add_data" method="post">
+            <input type="text" name="id" placeholder="Enter id">
+            <input type="text" name="password" placeholder="Enter password">
+            <button type="submit">Add Data</button>
+        </form>
+        
+        
+        <!-- Form for file upload -->
+        <form action="/upload_file" method="post" enctype="multipart/form-data">
+            <input type="file" name="document">
+            <button type="submit">Upload File</button>
+        </form>
+
+        <div class="container mt-5">
+            <form id="file-upload-form" class="uploader">
+                <div id="drop-zone" class="border p-5 text-center">
+                    <p>Drag and drop files here</p>
+                    <input type="file" name="file" id="file-input" multiple style="display:none"/>
+                </div>
+                <button type="button" class="btn btn-primary mt-3" onclick="document.getElementById('file-input').click();">Select Files</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
