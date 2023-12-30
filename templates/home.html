@@ -41,6 +41,21 @@
                 <button type="button" class="btn btn-primary mt-3" onclick="document.getElementById('file-input').click();">Select Files</button>
             </form>
         </div>
+        <div class="container mt-5">
+            <h2>Download File from IPFS</h2>
+            <form id="ipfs-form" action="" method="get" onsubmit="submitIPFSHash(); return false;">
+                <input type="text" id="ipfs-hash" placeholder="Enter IPFS Hash">
+                <button type="submit">Download File</button>
+            </form>
+        </div>
+        
+        <script>
+            function submitIPFSHash() {
+                var ipfsHash = document.getElementById('ipfs-hash').value;
+                var url = '/get_file/' + encodeURIComponent(ipfsHash);
+                window.location.href = url;
+            }
+        </script>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

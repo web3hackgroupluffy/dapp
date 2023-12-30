@@ -30,4 +30,11 @@ function handleFiles(files) {
     // Process the files here
     console.log(files);
 }
+// main.js
+document.getElementById('download-form').onsubmit = function() {
+    var ipfsHash = document.getElementById('ipfs-hash').value;
+    var downloadUrl = '/download-file/' + encodeURIComponent(ipfsHash);
+    window.location.href = downloadUrl;
+    return false; // Prevent default form submission
+};
 

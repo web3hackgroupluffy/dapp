@@ -1,8 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, Response, send_file
 import os
 import sqlite3
 from werkzeug.utils import secure_filename
+import requests
+import json
+"""
+# Example: Add a file to IPFS
+files = {
+    'file': open('./Test.docx', 'rb')
+}
 
+response = requests.post('http://127.0.0.1:5001/api/v0/add', files=files)
+print(json.loads(response.text))
+"""
 #from flask_sqlalchemy import SQLAlchemy
 
 UPLOAD_FOLDER = 'uploads'  # Set the path to the upload directory
@@ -56,15 +66,35 @@ def home():
 
 @app.route('/upload_file', methods=['POST'])
 def upload_file():
-    # Handle file upload
     if 'document' in request.files:
         file = request.files['document']
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            # Additional code to handle the uploaded file (e.g., storing in database)
-    #return "File uploaded successfully!"
+            
+            # Save file temporarily
+            temp_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(temp_path)
+
+            # Add file to IPFS
+            with open(temp_path, 'rb') as f:
+                files = {'file': f}
+                response = requests.post('http://127.0.0.1:5001/api/v0/add', files=files)
+                ipfs_hash = json.loads(response.text)['Hash']
+
+            # (Optional) Delete the temporary file if not needed
+            os.remove(temp_path)
+
+            return f"File uploaded successfully! IPFS hash: {ipfs_hash}"
     return redirect(url_for('home'))
+
+@app.route('/get_file/<ipfs_hash>')
+def get_file(ipfs_hash):
+    try:
+        # Fetch the file from IPFS using IPFS Gateway
+        gateway_url = f'http://localhost:8080/ipfs/{ipfs_hash}'
+        return redirect(gateway_url)
+    except Exception as e:
+        return f"An error occurred: {e}", 500
 
 
 
